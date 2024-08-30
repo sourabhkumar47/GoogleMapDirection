@@ -44,7 +44,8 @@ import java.util.Locale
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MapScreen(
-    mapsViewModel: MapsViewModel = viewModel()
+    mapsViewModel: MapsViewModel = viewModel(),
+    currentLocation: LatLng? = null
 ) {
     val context = LocalContext.current
     val geocoder = Geocoder(context, Locale.getDefault())
@@ -59,11 +60,15 @@ fun MapScreen(
         position = CameraPosition.fromLatLngZoom(LatLng(22.799466859874325, 79.4524185367257), 4f)
     }
 
-    // Function to get the location name from latitude and longitude
-    suspend fun getLocationName(latLng: LatLng): String {
+    // Function to get the first address line, city, and state from latitude and longitude
+    suspend fun getLocationName(latLng: LatLng): Triple<String, String, String> {
         return withContext(Dispatchers.IO) {
             val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            addresses?.firstOrNull()?.getAddressLine(0) ?: "Unknown Location"
+            val address = addresses?.firstOrNull()
+            val firstAddressLine = address?.getAddressLine(0)?.split(",")?.firstOrNull() ?: "Unknown Address"
+            val city = address?.locality ?: "Unknown City"
+            val state = address?.adminArea ?: "Unknown State"
+            Triple(firstAddressLine, city, state)
         }
     }
 
@@ -80,9 +85,9 @@ fun MapScreen(
             ) {
                 markerPosition.value?.let { latLng ->
                     LaunchedEffect(latLng) {
-                        val locationName = getLocationName(latLng)
-                        markerTitle.value = locationName
-                        markerSnippet.value = "Lat: ${latLng.latitude}, Lng: ${latLng.longitude}"
+                        val (firstAddressLine, city, state) = getLocationName(latLng)
+                        markerTitle.value = firstAddressLine
+                        markerSnippet.value = "$city, $state"
                     }
                     Marker(
                         state = rememberMarkerState(position = latLng).apply {
