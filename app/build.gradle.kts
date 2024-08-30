@@ -66,4 +66,29 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
+    implementation("androidx.compose.material:material-icons-extended:1.6.8")
+
+    // Jetpack Compose dependencies
+    implementation ("androidx.compose.ui:ui:1.6.8")
+    implementation ("androidx.compose.material:material:1.6.8")
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
+
+    //Maps
+    implementation("com.google.maps.android:maps-compose:4.3.3")
+    // Google Maps
+    implementation ("com.google.android.gms:play-services-maps:19.0.0")
+
+    // Google Location Services
+    implementation ("com.google.android.gms:play-services-location:21.3.0")
+
+    // Optionally, you can include the Compose utils library for Clustering,
+    // Street View metadata checks, etc.
+    implementation("com.google.maps.android:maps-compose-utils:4.3.3")
+
+    // Optionally, you can include the widgets library for ScaleBar, etc.
+    implementation("com.google.maps.android:maps-compose-widgets:4.3.3")
+
 }
